@@ -8,6 +8,36 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { Modal } from '@/components/ui/Modal';
 import { useCart, CartItem } from '@/hooks/useCart';
 
+const transformations = [
+  {
+    name: 'James L.',
+    result: 'Lost 45 lbs',
+    period: '6 Months',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=600',
+  },
+  {
+    name: 'Sarah M.',
+    result: 'Gained 15 lbs Muscle',
+    period: '4 Months',
+    image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600',
+  },
+  {
+    name: 'Mike R.',
+    result: 'Reduced Body Fat by 12%',
+    period: '3 Months',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600',
+  }
+];
+
+const facilityImages = [
+  { title: 'Main Lifting Floor', image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800' },
+  { title: 'HIIT Zone', image: 'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?q=80&w=800' },
+  { title: 'Recovery Suite', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800' },
+  { title: 'Cardio Deck', image: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=800' },
+  { title: 'Group Class Studio', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800' },
+  { title: 'Nutrition Lab', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=800' },
+];
+
 const products = [
   {
     id: 'pt-session',
@@ -88,12 +118,56 @@ export default function GalleryPage() {
   return (
     <div className="pt-32 pb-24 bg-black min-h-screen">
       <div className="container mx-auto px-6">
+        {/* Transformation Gallery */}
+        <section className="mb-24">
+          <div className="mb-12">
+            <h2 className="text-brand-red font-bold uppercase tracking-[0.3em] mb-4 text-sm">Real Results</h2>
+            <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">Transformation <span className="text-brand-red">Gallery</span></h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {transformations.map((item, i) => (
+              <div key={i} className="group relative rounded-2xl overflow-hidden bg-brand-charcoal border border-white/5">
+                <div className="relative h-[400px]">
+                   <Image src={item.image} alt={item.name} fill className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+                </div>
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h4 className="text-white font-black text-xl uppercase italic">{item.name}</h4>
+                  <p className="text-brand-red font-bold text-lg">{item.result}</p>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest font-bold mt-1">{item.period} Transformation</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Facility Showcase */}
+        <section className="mb-24">
+          <div className="mb-12 text-right">
+            <h2 className="text-brand-red font-bold uppercase tracking-[0.3em] mb-4 text-sm">The Environment</h2>
+            <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">Our <span className="text-brand-red">Facility</span></h3>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {facilityImages.map((img, i) => (
+              <div key={i} className="group relative h-48 md:h-72 rounded-xl overflow-hidden">
+                <Image src={img.image} alt={img.title} fill className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                   <span className="text-white font-black uppercase italic text-lg border-b-2 border-brand-red">{img.title}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="border-white/5 mb-24" />
+
+        {/* SHOP SECTION */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
           <div>
+            <h2 className="text-brand-red font-bold uppercase tracking-[0.3em] mb-4 text-sm">Merchandise & Services</h2>
             <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">
               The <span className="text-brand-red">Shop</span>
             </h1>
-            <p className="text-gray-400 mt-2">Premium gear and services for elite performance.</p>
           </div>
 
           <Button
