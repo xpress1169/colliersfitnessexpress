@@ -2,5 +2,10 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  NEXT_TELEMETRY_DISABLED = "1"
+  # Ensures that the build cache is used effectively
+  NETLIFY_NEXT_PLUGIN_SKIP_CACHE = "false"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
