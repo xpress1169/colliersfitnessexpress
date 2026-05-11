@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #e11d48;
+  --color-brand-charcoal: #121212;
+  --color-brand-gray: #1f1f1f;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  * {
+    @apply border-brand-gray;
+  }
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-gray rounded-full border-2 border-black;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-brand-red;
+}
+
+.glass-morphism {
+  @apply bg-brand-charcoal/80 backdrop-blur-md border border-white/10;
+}
+
+.text-gradient-red {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-rose-700;
+}
