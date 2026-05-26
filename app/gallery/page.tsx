@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { ShoppingCart, Trash2, CreditCard, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -108,9 +108,49 @@ const products = [
 export default function GalleryPage() {
   const { cart, addToCart, removeFromCart, clearCart, totalPrice } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const shopGridRef = useRef<HTMLDivElement>(null);
+  const clearCartRef = useRef<HTMLButtonElement>(null);
+  const processOrderRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const grid = shopGridRef.current;
+    if (!grid) return;
+
+    // JavaScript click event listener for "Add to Cart" buttons using event delegation
+    // When clicked, display: "Item added to the cart."
+    const handleAddToCartClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Check if the clicked element or its parent is the "Add To Cart" button
+      if (target.closest('button')?.textContent?.includes('Add To Cart')) {
+        alert('Item added to the cart.');
+      }
+    };
+
+    grid.addEventListener('click', handleAddToCartClick);
+    return () => grid.removeEventListener('click', handleAddToCartClick);
+  }, []);
+
+  useEffect(() => {
+    // These buttons are inside the Modal, so we attach listeners when it's open
+    if (isCartOpen && cart.length > 0) {
+      const clearBtn = clearCartRef.current;
+      const processBtn = processOrderRef.current;
+
+      const handleClearClick = () => alert('Cart cleared.');
+      const handleProcessClick = () => alert('Thank you for your order.');
+
+      if (clearBtn) clearBtn.addEventListener('click', handleClearClick);
+      if (processBtn) processBtn.addEventListener('click', handleProcessClick);
+
+      return () => {
+        if (clearBtn) clearBtn.removeEventListener('click', handleClearClick);
+        if (processBtn) processBtn.removeEventListener('click', handleProcessClick);
+      };
+    }
+  }, [isCartOpen, cart.length]);
 
   const handleProcessOrder = () => {
-    alert('Thank you for your order.');
+    // Alert is now handled by addEventListener as per requirements
     clearCart();
     setIsCartOpen(false);
   };
@@ -186,7 +226,7 @@ export default function GalleryPage() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div ref={shopGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
             <Card key={product.id} className="group flex flex-col h-full bg-brand-charcoal border-white/5 hover:border-brand-red/50 transition-all">
               <div className="relative h-64 overflow-hidden">
@@ -264,11 +304,11 @@ export default function GalleryPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button variant="outline" className="flex-1" onClick={clearCart}>
+              <Button ref={clearCartRef} variant="outline" className="flex-1" onClick={clearCart}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear Cart
               </Button>
-              <Button className="flex-1" onClick={handleProcessOrder}>
+              <Button ref={processOrderRef} className="flex-1" onClick={handleProcessOrder}>
                 <CreditCard className="mr-2 h-4 w-4" />
                 Process Order
               </Button>
