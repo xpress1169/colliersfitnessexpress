@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ShoppingCart, Trash2, CreditCard, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -108,9 +108,50 @@ const products = [
 export default function GalleryPage() {
   const { cart, addToCart, removeFromCart, clearCart, totalPrice } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const clearCartBtnRef = useRef<HTMLButtonElement>(null);
+  const processOrderBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Gallery Add to Cart event listener
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.add-to-cart-btn')) {
+        alert("Item added to the cart.");
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  // Gallery Clear Cart and Process Order event listeners
+  useEffect(() => {
+    if (!isCartOpen) return;
+
+    const clearBtn = clearCartBtnRef.current;
+    const processBtn = processOrderBtnRef.current;
+
+    const handleClearClick = () => {
+      alert("Cart cleared.");
+    };
+
+    const handleProcessClick = () => {
+      alert("Thank you for your order.");
+    };
+
+    if (clearBtn) clearBtn.addEventListener('click', handleClearClick);
+    if (processBtn) processBtn.addEventListener('click', handleProcessClick);
+
+    return () => {
+      if (clearBtn) clearBtn.removeEventListener('click', handleClearClick);
+      if (processBtn) processBtn.removeEventListener('click', handleProcessClick);
+    };
+  }, [isCartOpen]);
 
   const handleProcessOrder = () => {
-    alert('Thank you for your order.');
     clearCart();
     setIsCartOpen(false);
   };
@@ -208,7 +249,7 @@ export default function GalleryPage() {
               </CardHeader>
               <CardFooter className="flex items-center justify-between pt-4">
                 <span className="text-2xl font-black text-white">${product.price.toFixed(2)}</span>
-                <Button size="sm" onClick={() => addToCart(product)}>
+                <Button size="sm" onClick={() => addToCart(product)} className="add-to-cart-btn">
                   Add To Cart
                 </Button>
               </CardFooter>
@@ -264,11 +305,11 @@ export default function GalleryPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button variant="outline" className="flex-1" onClick={clearCart}>
+              <Button ref={clearCartBtnRef} variant="outline" className="flex-1" onClick={clearCart}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear Cart
               </Button>
-              <Button className="flex-1" onClick={handleProcessOrder}>
+              <Button ref={processOrderBtnRef} className="flex-1" onClick={handleProcessOrder}>
                 <CreditCard className="mr-2 h-4 w-4" />
                 Process Order
               </Button>

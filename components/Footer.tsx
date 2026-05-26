@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Dumbbell, Instagram, Facebook, Send, Twitter, Youtube } from 'lucide-react';
 import { Button } from './ui/Button';
@@ -8,6 +8,26 @@ import { Input } from './ui/Input';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const subscribeBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Footer Subscribe Button event listener
+  useEffect(() => {
+    const btn = subscribeBtnRef.current;
+
+    const handleClick = () => {
+      alert("Thank you for subscribing.");
+    };
+
+    if (btn) {
+      btn.addEventListener('click', handleClick);
+    }
+
+    return () => {
+      if (btn) {
+        btn.removeEventListener('click', handleClick);
+      }
+    };
+  }, []);
 
   return (
     <footer className="bg-brand-charcoal border-t border-brand-gray pt-20 pb-10">
@@ -80,9 +100,9 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold uppercase tracking-widest mb-6">Newsletter</h4>
             <p className="text-gray-400 mb-4 text-sm">Get the latest workout tips and exclusive offers.</p>
-            <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!'); }}>
+            <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); }}>
               <Input placeholder="Email Address" className="h-10" required />
-              <Button size="sm" type="submit" className="px-3">
+              <Button ref={subscribeBtnRef} size="sm" type="submit" className="px-3">
                 <Send size={18} />
               </Button>
             </form>

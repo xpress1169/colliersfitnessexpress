@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Phone, MapPin, Clock, Instagram, Facebook, Send, CheckCircle, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -9,6 +9,28 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export default function AboutPage() {
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
+
+  // About Us Page Submit Button event listener
+  useEffect(() => {
+    const btn = submitBtnRef.current;
+
+    const handleClick = (e: MouseEvent) => {
+      e.preventDefault();
+      alert("Thank you for your message.");
+    };
+
+    if (btn) {
+      btn.addEventListener('click', handleClick);
+    }
+
+    return () => {
+      if (btn) {
+        btn.removeEventListener('click', handleClick);
+      }
+    };
+  }, []);
+
   // Form persistence using localStorage
   const [formData, setFormData] = useLocalStorage('feedback-form', {
     name: '',
@@ -214,7 +236,7 @@ export default function AboutPage() {
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full group">
+                <Button ref={submitBtnRef} type="submit" size="lg" className="w-full group">
                   Submit Request <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </Button>
               </>
