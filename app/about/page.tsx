@@ -17,7 +17,15 @@ export default function AboutPage() {
 
     const handleClick = (e: MouseEvent) => {
       e.preventDefault();
-      alert("Thank you for your message.");
+
+      const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
+      const phoneInput = document.querySelector('input[name="phone"]') as HTMLInputElement;
+
+      if (!emailInput?.value || !phoneInput?.value) {
+        alert("Error: Email and Phone Number are required. Please fill in both fields to submit your message.");
+      } else {
+        alert("Thank you for your message.");
+      }
     };
 
     if (btn) {
@@ -197,6 +205,7 @@ export default function AboutPage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="(555) 000-0000"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
